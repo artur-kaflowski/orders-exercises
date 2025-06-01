@@ -3,7 +3,10 @@ import '@lion/form/define';
 import '@lion/input/define';
 import '@lion/button/define';
 import { apiService } from '../services/api-service.js';
-import { Required, MinLength, MinNumber } from '@lion/form-core';
+import {
+  RequiredWithMessage
+} from '../services/validators.js';
+
 
 export class OrderForm extends LitElement {
   static get properties() {
@@ -83,7 +86,6 @@ export class OrderForm extends LitElement {
     const userId = formData.get('userId');
     const description = formData.get('description');
 
-    // Basic validation (optional, lion-input should validate too)
     if (!userId || !description) {
       this.error = 'Please fill in all required fields';
       return;
@@ -100,7 +102,7 @@ export class OrderForm extends LitElement {
       this.success = false;
 
       await apiService.createOrder(orderData);
-
+      console.log("strzal na backend");
       form.reset();
       this.success = true;
 
@@ -139,41 +141,36 @@ export class OrderForm extends LitElement {
 
         ${this.success ? html`
           <div class="success-message">
-            <p>Order created successfully! Redirecting to orders list...</p>
+            <p>Order created successfully!</p>
           </div>
         ` : ''}
 
         <lion-form @submit=${this.handleSubmit}>
-          <form>
+          <form @submit="${ev => ev.preventDefault()}">
             <lion-input
                 name="userId"
                 label="User ID"
                 type="number"
-                min="1"
-                required
-                .validators="${[
-                  new Required({ message: 'User ID is required' }),
-                  new MinNumber({ minNumber: 1, message: 'User ID must be a positive number' })
-                ]}"
+                .validators=${[
+                  new RequiredWithMessage()
+                ]}
             ></lion-input>
 
             <lion-input
                 name="description"
                 label="Description"
-                required
-                .validators="${[
-                  new Required({ message: 'Description is required' }),
-                  new MinLength({ minLength: 3, message: 'Description must be at least 3 characters' })
-                ]}"
+                .validators=${[
+                  new RequiredWithMessage()
+                ]}
             ></lion-input>
 
             <div class="form-actions">
-              <lion-button type="submit" ?disabled=${this.loading}>
+              <button type="submit" ?disabled=${this.loading}>
                 ${this.loading ? 'Creating...' : 'Create Order'}
-              </lion-button>
-              <lion-button @click=${this.handleCancel} ?disabled=${this.loading}>
+              </button>
+              <button @click=${this.handleCancel}>
                 Cancel
-              </lion-button>
+              </button>
             </div>
           </form>
         </lion-form>
