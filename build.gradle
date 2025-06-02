@@ -57,6 +57,9 @@ dependencies {
     testImplementation 'org.spockframework:spock-core:2.3-groovy-3.0'
     testImplementation 'org.spockframework:spock-spring:2.3-groovy-3.0'
     testImplementation 'com.h2database:h2'
+    testImplementation 'org.testcontainers:testcontainers:1.19.7'
+    testImplementation 'org.testcontainers:kafka:1.19.7'
+    testImplementation 'org.testcontainers:spock:1.19.7'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 }
 

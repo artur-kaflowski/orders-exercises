@@ -1,21 +1,4 @@
 {
-  "presets": [
-    [
-      "@babel/preset-env",
-      {
-        "targets": {
-          "browsers": [
-            "last 2 Chrome versions",
-            "last 2 Firefox versions",
-            "last 2 Safari versions",
-            "last 2 Edge versions"
-          ]
-        },
-        "modules": false,
-        "useBuiltIns": "usage",
-        "corejs": 3
-      }
-    ]
-  ],
+  "presets": ["@babel/preset-env"],
   "plugins": []
 }

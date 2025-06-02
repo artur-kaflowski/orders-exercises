@@ -2,9 +2,7 @@ export class Router {
   constructor(outlet) {
     this.outlet = outlet;
     this.routes = new Map();
-    this.currentComponent = null;
-    
-    // Handle browser back/forward buttons
+
     window.addEventListener('popstate', () => this.handleLocation());
   }
 
@@ -12,7 +10,6 @@ export class Router {
   addRoute(path, componentName, importFunc) {
     this.routes.set(path, { componentName, importFunc });
   }
-
 
   navigate(path, params = {}) {
     window.history.pushState(params, '', path);
@@ -23,9 +20,6 @@ export class Router {
     this.handleLocation();
   }
 
-  /**
-   * Handle the current location
-   */
   async handleLocation() {
     const path = window.location.pathname;
     let matchedRoute = null;
@@ -68,14 +62,8 @@ export class Router {
     }
   }
 
-  /**
-   * Match a path against a route pattern
-   * @param {string} path - The current URL path
-   * @param {string} routePath - The route pattern to match against
-   * @returns {Object|null} - Match result with params or null if no match
-   */
   matchRoute(path, routePath) {
-    // Split the path and route into segments
+
     const pathSegments = path.split('/').filter(segment => segment !== '');
     const routeSegments = routePath.split('/').filter(segment => segment !== '');
 

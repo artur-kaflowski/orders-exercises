@@ -3,23 +3,29 @@ package com.example.orders_exercise.repository
 import com.example.orders_exercise.entity.Order
 import com.example.orders_exercise.entity.OrderStatus
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest
+import org.springframework.boot.test.context.SpringBootTest
+import org.springframework.test.context.ContextConfiguration
 import spock.lang.Specification
 
 import java.time.LocalDateTime
 
-@DataJpaTest
+@SpringBootTest
+@ContextConfiguration
 class OrderRepositoryIntegrationSpec extends Specification {
 
     @Autowired
     private OrderRepository orderRepository
 
     def setup() {
-        orderRepository.deleteAll()
+        if (orderRepository != null) {
+            orderRepository.deleteAll()
+        }
     }
 
     def cleanup() {
-        orderRepository.deleteAll()
+        if (orderRepository != null) {
+            orderRepository.deleteAll()
+        }
     }
 
     def "should save new order"() {
@@ -30,13 +36,13 @@ class OrderRepositoryIntegrationSpec extends Specification {
         order.setStatus(OrderStatus.NEW)
         order.setCreatedAt(LocalDateTime.now())
 
-        when: "the order is saved"
+        when: "order is saved"
         def savedOrder = orderRepository.save(order)
 
-        then: "the order is saved with an ID"
+        then: "order is saved with an ID"
         savedOrder.id != null
-        
-        and: "the order can be retrieved by ID"
+
+        and: "order can be retrieved by ID"
         def retrievedOrder = orderRepository.findById(savedOrder.id).orElse(null)
         retrievedOrder != null
         retrievedOrder.id == savedOrder.id
@@ -52,13 +58,13 @@ class OrderRepositoryIntegrationSpec extends Specification {
         order1.setDescription("Order 1")
         order1.setStatus(OrderStatus.NEW)
         order1.setCreatedAt(LocalDateTime.now())
-        
+
         def order2 = new Order()
         order2.setUserId(2L)
         order2.setDescription("Order 2")
         order2.setStatus(OrderStatus.PROCESSING)
         order2.setCreatedAt(LocalDateTime.now())
-        
+
         orderRepository.saveAll([order1, order2])
 
         when: "retrieving all orders"
@@ -71,7 +77,7 @@ class OrderRepositoryIntegrationSpec extends Specification {
     }
 
     def "should delete an order"() {
-        given: "an order exists in the database"
+        given: "order exists in the database"
         def order = new Order()
         order.setUserId(1L)
         order.setDescription("Test Order")
@@ -87,7 +93,7 @@ class OrderRepositoryIntegrationSpec extends Specification {
     }
 
     def "should update an order"() {
-        given: "an order exists in the database"
+        given: "order exists in the database"
         def order = new Order()
         order.setUserId(1L)
         order.setDescription("Original Description")
@@ -100,7 +106,7 @@ class OrderRepositoryIntegrationSpec extends Specification {
         savedOrder.setStatus(OrderStatus.PROCESSING)
         orderRepository.save(savedOrder)
 
-        then: "the order is updated in the database"
+        then: "order is updated in the database"
         def updatedOrder = orderRepository.findById(savedOrder.id).orElse(null)
         updatedOrder != null
         updatedOrder.description == "Updated Description"

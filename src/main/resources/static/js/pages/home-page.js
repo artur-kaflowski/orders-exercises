@@ -78,9 +78,9 @@ export class HomePage extends LitElement {
             <p>Easily create new orders.</p>
           </div>
 
-          <div class="feature-card" @click=${() => this.handleNavigate('/edit-order')}>
-            <h3>Edit Orders</h3>
-            <p>Change existing orders easily.</p>
+          <div class="feature-card" @click=${() => this.handleNavigate('/orders-from-kafka')}>
+            <h3>Orders Kafka</h3>
+            <p>Get order from Kafka queue</p>
           </div>
         </div>
       </div>

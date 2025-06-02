@@ -1,17 +1,15 @@
 import { Router } from './router.js';
 import './components/app-container.js';
 import './components/order-list.js';
-import './components/order-detail.js';
 import './components/order-form.js';
+import './components/order-kafka.js';
 
-// Initialize the router
 const router = new Router(document.getElementById('outlet'));
 
-// Define routes
 router.addRoute('/', 'home-page', () => import('./pages/home-page.js'));
 router.addRoute('/orders', 'order-list', () => import('./components/order-list.js'));
-router.addRoute('/orders/:id', 'order-detail', () => import('./components/order-detail.js'));
 router.addRoute('/create-order', 'order-form', () => import('./components/order-form.js'));
+router.addRoute('/orders-from-kafka', 'order-kafka', () => import('./components/order-kafka.js'));
 
 router.start();
 
@@ -30,3 +28,7 @@ document.getElementById('create-order-link').addEventListener('click', (e) => {
   router.navigate('/create-order');
 });
 
+document.getElementById('orders-kafka-link').addEventListener('click', (e) => {
+  e.preventDefault();
+  router.navigate('/orders-from-kafka');
+});

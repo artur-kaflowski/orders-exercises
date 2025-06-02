@@ -1,10 +1,14 @@
 package com.example.orders_exercise.service.kafka;
 
 import com.example.orders_exercise.dto.kafka.OrderEvent;
+import com.example.orders_exercise.dto.kafka.OrderStatusChangedEvent;
 import com.example.orders_exercise.entity.Order;
+import com.example.orders_exercise.entity.OrderStatus;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
+
+import java.time.LocalDateTime;
 
 @Service
 public class OrderEventPublisher {
@@ -26,10 +30,10 @@ public class OrderEventPublisher {
         kafkaTemplate.send(orderCreatedTopic, event);
     }
 
-//    public void publishOrderStatusChanged(Long orderId, String oldStatus, String newStatus) {
-//        OrderStatusChangedEvent event = new OrderStatusChangedEvent(
-//                orderId, oldStatus, newStatus, LocalDateTime.now()
-//        );
-//        kafkaTemplate.send(orderStatusChangedTopic, event);
-//    }
+    public void publishOrderStatusChanged(Long orderId, OrderStatus oldStatus, OrderStatus newStatus) {
+        OrderStatusChangedEvent event = new OrderStatusChangedEvent(
+                orderId, oldStatus, newStatus, LocalDateTime.now()
+        );
+        kafkaTemplate.send(orderStatusChangedTopic, event);
+    }
 }

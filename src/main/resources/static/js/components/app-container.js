@@ -29,7 +29,6 @@ export class AppContainer extends LitElement {
 
   constructor() {
     super();
-    this.title = 'Orders Exercises';
   }
 
   connectedCallback() {

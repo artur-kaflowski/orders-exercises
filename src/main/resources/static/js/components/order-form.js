@@ -100,9 +100,9 @@ export class OrderForm extends LitElement {
       this.loading = true;
       this.error = null;
       this.success = false;
+      console.log("strzal na backend");
 
       await apiService.createOrder(orderData);
-      console.log("strzal na backend");
       form.reset();
       this.success = true;
 
@@ -116,8 +116,22 @@ export class OrderForm extends LitElement {
       }, 2000);
 
     } catch (err) {
-      this.error = `Failed to create order: ${err.message}`;
       console.error(err);
+
+      if (err.data && err.data.validationErrors) {
+        // Handle structured validation errors
+        const validationErrors = err.data.validationErrors;
+        const errorMessages = Object.entries(validationErrors)
+          .map(([field, message]) => `${field}: ${message}`)
+          .join(', ');
+        this.error = `Validation error: ${errorMessages}`;
+      } else if (err.data && err.data.message) {
+        // Handle other structured errors
+        this.error = `Error: ${err.data.message}`;
+      } else {
+        // Fallback to generic error message
+        this.error = `Failed to create order: ${err.message}`;
+      }
     } finally {
       this.loading = false;
     }
